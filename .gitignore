@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# Env / secrets
+.env
+.env.*
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+.idea/
+
+# VSCode (keep mcp.json + extensions.json, ignore rest)
+.vscode/*
+!.vscode/mcp.json
+!.vscode/extensions.json
+
+# Serena
+.serena/
+
+# Frontend (has its own .gitignore too, but cover root-level runs)
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/

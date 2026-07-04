@@ -1,9 +1,9 @@
 from mcp.server.fastmcp import FastMCP
 import httpx
 
-mcp = FastMCP("Blink Test MCP")
+mcp = FastMCP("Blink Test MCP", host="127.0.0.1", port=8001)
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://localhost:8008"
 
 @mcp.tool()
 async def get_status():
@@ -50,8 +50,4 @@ async def reset_blink_test():
     return response.json()
 
 if __name__ == "__main__":
-    mcp.run(
-        transport="http",
-        host="127.0.0.1",
-        port=8001,
-    )
+    mcp.run(transport="streamable-http")

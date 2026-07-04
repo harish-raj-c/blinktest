@@ -1,8 +1,8 @@
 <script>
   export let onComplete;
 
-  let status = 'initializing';
-  let calibrationStatus = 'Checking camera...';
+  let status = "initializing";
+  let calibrationStatus = "Checking camera...";
   let isReady = false;
   let testRunning = false;
   let elapsed = 0;
@@ -18,17 +18,17 @@
 
   async function connectWebSocket() {
     try {
-      websocket = new WebSocket('ws://localhost:8000/ws');
-      
+      websocket = new WebSocket("ws://localhost:8008/ws");
+
       websocket.onopen = () => {
-        console.log('WebSocket connected');
-        status = 'connected';
+        console.log("WebSocket connected");
+        status = "connected";
       };
 
       websocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        
-        if (data.type === 'status') {
+
+        if (data.type === "status") {
           calibrationStatus = data.status;
           isReady = data.ready;
           testRunning = data.running;
@@ -44,57 +44,57 @@
       };
 
       websocket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        calibrationStatus = 'Connection error';
+        console.error("WebSocket error:", error);
+        calibrationStatus = "Connection error";
       };
 
       websocket.onclose = () => {
-        console.log('WebSocket closed');
+        console.log("WebSocket closed");
         if (testRunning) {
           // Attempt to reconnect
           setTimeout(connectWebSocket, 1000);
         }
       };
     } catch (error) {
-      console.error('Failed to connect:', error);
-      calibrationStatus = 'Failed to connect to server';
+      console.error("Failed to connect:", error);
+      calibrationStatus = "Failed to connect to server";
     }
   }
 
   async function startTest() {
     try {
-      const response = await fetch('http://localhost:8000/api/start', {
-        method: 'POST'
+      const response = await fetch("http://localhost:8008/api/start", {
+        method: "POST",
       });
       const data = await response.json();
-      
+
       if (data.success) {
         testRunning = true;
       } else {
         calibrationStatus = data.message;
       }
     } catch (error) {
-      console.error('Failed to start test:', error);
-      calibrationStatus = 'Failed to start test';
+      console.error("Failed to start test:", error);
+      calibrationStatus = "Failed to start test";
     }
   }
 
   async function stopTest() {
     testRunning = false;
-    
+
     try {
-      const response = await fetch('http://localhost:8000/api/stop', {
-        method: 'POST'
+      const response = await fetch("http://localhost:8008/api/stop", {
+        method: "POST",
       });
       const data = await response.json();
-      
+
       if (data.success && websocket) {
         websocket.close();
       }
-      
+
       onComplete(data.results || {});
     } catch (error) {
-      console.error('Failed to stop test:', error);
+      console.error("Failed to stop test:", error);
       onComplete({});
     }
   }
@@ -109,7 +109,7 @@
   connectWebSocket();
 
   // Cleanup on unmount
-  import { onDestroy } from 'svelte';
+  import { onDestroy } from "svelte";
   onDestroy(() => {
     if (websocket) {
       websocket.close();
@@ -142,22 +142,41 @@
   <div class="content">
     {#if !testRunning}
       <div class="calibration-message">
-        <div class="icon" class:icon-success={isReady} class:icon-warning={!isReady}>
-          {isReady ? '✅' : '⚠️'}
+        <div
+          class="icon"
+          class:icon-success={isReady}
+          class:icon-warning={!isReady}
+        >
+          {isReady ? "✅" : "⚠️"}
         </div>
         <h2 class:success={isReady} class:warning={!isReady}>
-          {isReady ? 'Ready to Start' : 'Calibration Required'}
+          {isReady ? "Ready to Start" : "Calibration Required"}
         </h2>
         <div class="status-details">
           <p class="status-message">{calibrationStatus}</p>
           {#if !isReady}
             <div class="checklist">
-              <div class="check-item" class:checked={status === 'Your face is not detected. Please position yourself in front of the camera.'}>
-                <span class="check-icon">{face_detected ? '✓' : '✗'}</span>
+              <div
+                class="check-item"
+                class:checked={status ===
+                  "Your face is not detected. Please position yourself in front of the camera."}
+              >
+                <span class="check-icon">{face_detected ? "✓" : "✗"}</span>
                 <span>Face detected</span>
               </div>
-              <div class="check-item" class:checked={depth_center !== null && depth_center >= MIN_DEPTH && depth_center <= MAX_DEPTH}>
-                <span class="check-icon">{depth_center !== null && depth_center >= MIN_DEPTH && depth_center <= MAX_DEPTH ? '✓' : '✗'}</span>
+              <div
+                class="check-item"
+                class:checked={depth_center !== null &&
+                  depth_center >= MIN_DEPTH &&
+                  depth_center <= MAX_DEPTH}
+              >
+                <span class="check-icon"
+                  >{depth_center !== null &&
+                  depth_center >= MIN_DEPTH &&
+                  depth_center <= MAX_DEPTH
+                    ? "✓"
+                    : "✗"}</span
+                >
                 <span>Correct distance ({MIN_DEPTH}-{MAX_DEPTH}mm)</span>
               </div>
             </div>
@@ -174,9 +193,14 @@
         <h2>Read the following text naturally:</h2>
         <p class="text">{readingText}</p>
         <div class="progress-bar">
-          <div class="progress" style="width: {(elapsed / testDuration) * 100}%"></div>
+          <div
+            class="progress"
+            style="width: {(elapsed / testDuration) * 100}%"
+          ></div>
         </div>
-        <p class="instruction">Keep reading naturally. The test will complete automatically.</p>
+        <p class="instruction">
+          Keep reading naturally. The test will complete automatically.
+        </p>
       </div>
     {/if}
   </div>
@@ -259,14 +283,26 @@
   }
 
   @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
   }
 
   @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-5px);
+    }
+    75% {
+      transform: translateX(5px);
+    }
   }
 
   .calibration-message h2 {
@@ -345,7 +381,9 @@
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
   }
 
   .start-btn:hover {

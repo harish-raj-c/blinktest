@@ -42,11 +42,7 @@ async def start_test():
     """Start the blink test"""
     if blink_test.running:
         return {"success": False, "message": "Test already running"}
-    
-    ready, status = blink_test.calibration_status()
-    if not ready:
-        return {"success": False, "message": f"Not ready: {status}"}
-    
+
     blink_test.start()
     return {"success": True, "message": "Test started"}
 
@@ -174,4 +170,4 @@ async def startup_event():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8008)
