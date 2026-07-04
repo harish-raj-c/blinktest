@@ -6,7 +6,7 @@
 
   let currentPage = 'instructions';
   let testResults = null;
-  let watcherSocket = null;``
+  let watcherSocket = null;
 
   function goToReading() {
     currentPage = 'reading';
