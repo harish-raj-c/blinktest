@@ -39,7 +39,7 @@ pip install -r requirements.txt
 python server.py
 ```
 
-The server will start on `http://localhost:8000`
+The server will start on `http://localhost:8001`
 
 ### Frontend Setup
 
@@ -126,7 +126,7 @@ blinktest/
 
 ## Troubleshooting
 
-- **WebSocket connection fails**: Ensure the backend server is running on port 8000
+- **WebSocket connection fails**: Ensure the backend server is running on port 8001
 - **Calibration stuck**: Check that NATS is receiving data from the eye tracking system
 - **Frontend not updating**: Verify WebSocket connection is established in browser console
 - **Port already in use**: The frontend will automatically try the next available port

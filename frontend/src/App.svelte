@@ -23,7 +23,7 @@
   }
 
   function connectWatcher() {
-    watcherSocket = new WebSocket('ws://localhost:8008/ws');
+    watcherSocket = new WebSocket('ws://localhost:8765/ws');
 
     watcherSocket.onmessage = (event) => {
       const data = JSON.parse(event.data);

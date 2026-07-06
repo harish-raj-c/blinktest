@@ -18,7 +18,7 @@
 
   async function connectWebSocket() {
     try {
-      websocket = new WebSocket("ws://localhost:8008/ws");
+      websocket = new WebSocket("ws://localhost:8001/ws");
 
       websocket.onopen = () => {
         console.log("WebSocket connected");
@@ -63,7 +63,7 @@
 
   async function startTest() {
     try {
-      const response = await fetch("http://localhost:8008/api/start", {
+      const response = await fetch("http://localhost:8001/api/start", {
         method: "POST",
       });
       const data = await response.json();
@@ -83,7 +83,7 @@
     testRunning = false;
 
     try {
-      const response = await fetch("http://localhost:8008/api/stop", {
+      const response = await fetch("http://localhost:8001/api/stop", {
         method: "POST",
       });
       const data = await response.json();
